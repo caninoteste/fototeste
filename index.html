@@ -2,16 +2,29 @@
 <html>
 
 <head>
-
 <meta charset="UTF-8">
 <title>Galeria de Fotos</title>
 
 <style>
 
 body{
-font-family:Arial;
+font-family: Arial;
 background:#f4f4f4;
 text-align:center;
+}
+
+.albuns{
+display:flex;
+justify-content:center;
+margin-top:40px;
+}
+
+.album{
+background:white;
+padding:30px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.2);
+cursor:pointer;
 }
 
 .galeria{
@@ -35,17 +48,6 @@ width:100%;
 
 button{
 margin-top:5px;
-cursor:pointer;
-}
-
-#carrinho{
-position:fixed;
-right:20px;
-top:20px;
-background:white;
-padding:15px;
-border-radius:10px;
-box-shadow:0 3px 10px rgba(0,0,0,0.3);
 }
 
 </style>
@@ -54,36 +56,54 @@ box-shadow:0 3px 10px rgba(0,0,0,0.3);
 
 <body>
 
-<h1>TESTE SITE</h1>
+<h1>Galeria de Fotos</h1>
 
-<h2>Álbum TESTE SITE</h2>
+<div id="home">
 
-<div class="galeria" id="galeria"></div>
+<h2>Álbuns</h2>
 
-<div id="carrinho">
+<div class="albuns">
 
-<h3>Carrinho</h3>
-<ul id="lista"></ul>
+<div class="album" onclick="abrirAlbum()">
+TESTE SITE
+</div>
 
 </div>
 
+</div>
+
+
+<div id="album" style="display:none">
+
+<h2>Álbum TESTE SITE</h2>
+
+<button onclick="voltar()">Voltar</button>
+
+<div class="galeria" id="galeria"></div>
+
+</div>
+
+
 <script>
 
-let carrinho=[]
+function abrirAlbum(){
 
-function adicionar(numero){
+document.getElementById("home").style.display="none"
+document.getElementById("album").style.display="block"
 
-carrinho.push(numero)
-
-let lista=document.getElementById("lista")
-
-let item=document.createElement("li")
-
-item.innerText="Foto "+numero
-
-lista.appendChild(item)
+carregarFotos()
 
 }
+
+function voltar(){
+
+document.getElementById("album").style.display="none"
+document.getElementById("home").style.display="block"
+
+}
+
+
+function carregarFotos(){
 
 let url="https://docs.google.com/spreadsheets/d/1m0-dDIjgq9p-bYnb4r_99PcXEvYzUsfaMfpQeiwNf50/gviz/tq?tqx=out:csv"
 
@@ -97,20 +117,26 @@ let linhas=data.split("\n").slice(1)
 
 let galeria=document.getElementById("galeria")
 
+galeria.innerHTML=""
+
 linhas.forEach(linha=>{
 
-let colunas=linha.split(",")
+let col=linha.split(",")
 
-let numero=colunas[0]
-let foto=colunas[1]
+let numero=col[0]
+let foto=col[1]
+
+if(!foto) return
 
 let div=document.createElement("div")
 div.className="foto"
 
 div.innerHTML=`
+
 <img src="${foto}">
 <p>Foto ${numero}</p>
-<button onclick="adicionar('${numero}')">Adicionar</button>
+<button>Adicionar ao carrinho</button>
+
 `
 
 galeria.appendChild(div)
@@ -118,6 +144,8 @@ galeria.appendChild(div)
 })
 
 })
+
+}
 
 </script>
 
