@@ -2,30 +2,24 @@
 <html>
 
 <head>
+
 <meta charset="UTF-8">
 <title>Galeria de Fotos</title>
 
 <style>
 
 body{
-font-family: Arial;
-background:#f5f5f5;
+font-family:Arial;
+background:#f4f4f4;
 text-align:center;
 }
 
-h1{
-margin-top:30px;
-}
-
-.album{
-margin:30px;
-}
-
-.grid{
+.galeria{
 display:grid;
 grid-template-columns:repeat(auto-fill,200px);
 gap:20px;
 justify-content:center;
+margin-top:30px;
 }
 
 .foto{
@@ -41,7 +35,6 @@ width:100%;
 
 button{
 margin-top:5px;
-padding:5px 10px;
 cursor:pointer;
 }
 
@@ -63,24 +56,13 @@ box-shadow:0 3px 10px rgba(0,0,0,0.3);
 
 <h1>TESTE SITE</h1>
 
-<p>Antes de acessar faça o cadastro:</p>
+<h2>Álbum TESTE SITE</h2>
 
-<a href="https://docs.google.com/forms/d/1TcSssWLXoJaLA141j2E_W8P-UxL70eVmOyPVTWX7k2w/viewform" target="_blank">
-Fazer cadastro
-</a>
-
-<div class="album">
-
-<h2>Álbum: TESTE SITE</h2>
-
-<div class="grid" id="galeria"></div>
-
-</div>
+<div class="galeria" id="galeria"></div>
 
 <div id="carrinho">
 
 <h3>Carrinho</h3>
-
 <ul id="lista"></ul>
 
 </div>
@@ -103,10 +85,9 @@ lista.appendChild(item)
 
 }
 
-// LINK CSV DA PLANILHA
-let sheetURL="https://docs.google.com/spreadsheets/d/1m0-dDIjgq9p-bYnb4r_99PcXEvYzUsfaMfpQeiwNf50/gviz/tq?tqx=out:csv"
+let url="https://docs.google.com/spreadsheets/d/1m0-dDIjgq9p-bYnb4r_99PcXEvYzUsfaMfpQeiwNf50/gviz/tq?tqx=out:csv"
 
-fetch(sheetURL)
+fetch(url)
 
 .then(res=>res.text())
 
@@ -118,20 +99,18 @@ let galeria=document.getElementById("galeria")
 
 linhas.forEach(linha=>{
 
-let col=linha.split(",")
+let colunas=linha.split(",")
 
-let numero=col[0]
-let foto=col[1]
+let numero=colunas[0]
+let foto=colunas[1]
 
 let div=document.createElement("div")
 div.className="foto"
 
 div.innerHTML=`
-
 <img src="${foto}">
 <p>Foto ${numero}</p>
 <button onclick="adicionar('${numero}')">Adicionar</button>
-
 `
 
 galeria.appendChild(div)
