@@ -1,31 +1,78 @@
-<script>
-function carregarFotos(){
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Teste Galeria</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    text-align: center;
+    padding: 20px;
+}
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+.galeria {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 200px);
+    gap: 20px;
+    justify-content: center;
+    margin-top: 30px;
+}
+.foto {
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+.foto img {
+    width: 100%;
+}
+</style>
+</head>
+<body>
 
-    let url="https://docs.google.com/spreadsheets/d/e/2PACX-1vQl28B_dLz0aAl2rIvZvue6LLMoWgwhWdwlkS9knj1peYlLq3U_C3f0zi36bzyWFUo-_E7njQSWLXxI/pub?gid=670100109&single=true&output=csv"
+<h1>Teste Galeria</h1>
+<button onclick="carregarFotos()">Foto Parque</button>
+
+<div class="galeria" id="galeria"></div>
+
+<script>
+function carregarFotos() {
+    const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQl28B_dLz0aAl2rIvZvue6LLMoWgwhWdwlkS9knj1peYlLq3U_C3f0zi36bzyWFUo-_E7njQSWLXxI/pub?gid=670100109&single=true&output=csv";
 
     fetch(url)
     .then(res => res.text())
     .then(data => {
-        let linhas = data.split("\n").slice(1) // pular cabeçalho
-        let galeria = document.getElementById("galeria")
-        galeria.innerHTML = ""
+        const linhas = data.split("\n").slice(1); // Pular cabeçalho
+        const galeria = document.getElementById("galeria");
+        galeria.innerHTML = "";
 
         linhas.forEach(linha => {
-            let col = linha.split(",")
-            let numero = col[0].trim()
-            let foto = col[1].trim()
+            const col = linha.split(",");
+            const numero = col[0]?.trim();
+            const foto = col[1]?.trim();
 
-            if(!foto) return
+            if (!foto) return;
 
-            let div = document.createElement("div")
-            div.className = "foto"
+            const div = document.createElement("div");
+            div.className = "foto";
             div.innerHTML = `
-                <img src="${foto}">
+                <img src="${foto}" alt="Foto ${numero}">
                 <p>Foto ${numero}</p>
-                <button>Adicionar ao carrinho</button>
-            `
-            galeria.appendChild(div)
-        })
+            `;
+            galeria.appendChild(div);
+        });
     })
+    .catch(err => {
+        console.error("Erro ao carregar CSV:", err);
+        alert("Não foi possível carregar as fotos.");
+    });
 }
 </script>
+
+</body>
+</html>
