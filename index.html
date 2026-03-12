@@ -1,18 +1,146 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+<meta charset="UTF-8">
 <title>Galeria de Fotos</title>
+
+<style>
+
+body{
+font-family: Arial;
+background:#f5f5f5;
+text-align:center;
+}
+
+h1{
+margin-top:30px;
+}
+
+.album{
+margin:30px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fill,200px);
+gap:20px;
+justify-content:center;
+}
+
+.foto{
+background:white;
+padding:10px;
+border-radius:8px;
+box-shadow:0 2px 5px rgba(0,0,0,0.2);
+}
+
+.foto img{
+width:100%;
+}
+
+button{
+margin-top:5px;
+padding:5px 10px;
+cursor:pointer;
+}
+
+#carrinho{
+position:fixed;
+right:20px;
+top:20px;
+background:white;
+padding:15px;
+border-radius:10px;
+box-shadow:0 3px 10px rgba(0,0,0,0.3);
+}
+
+</style>
+
 </head>
 
 <body>
 
-<h1>Fotos do Evento</h1>
+<h1>TESTE SITE</h1>
 
-<p>Bem-vindo à galeria.</p>
+<p>Antes de acessar faça o cadastro:</p>
 
-<img src="https://drive.google.com/file/d/1rvEllDcsY_fMQjj-mdb0bHegsV1XlNla/view?usp=drive_link">
-<br><br>
-<img src="https://picsum.photos/400/300">
+<a href="https://docs.google.com/forms/d/1TcSssWLXoJaLA141j2E_W8P-UxL70eVmOyPVTWX7k2w/viewform" target="_blank">
+Fazer cadastro
+</a>
+
+<div class="album">
+
+<h2>Álbum: TESTE SITE</h2>
+
+<div class="grid" id="galeria"></div>
+
+</div>
+
+<div id="carrinho">
+
+<h3>Carrinho</h3>
+
+<ul id="lista"></ul>
+
+</div>
+
+<script>
+
+let carrinho=[]
+
+function adicionar(numero){
+
+carrinho.push(numero)
+
+let lista=document.getElementById("lista")
+
+let item=document.createElement("li")
+
+item.innerText="Foto "+numero
+
+lista.appendChild(item)
+
+}
+
+// LINK CSV DA PLANILHA
+let sheetURL="https://docs.google.com/spreadsheets/d/1m0-dDIjgq9p-bYnb4r_99PcXEvYzUsfaMfpQeiwNf50/gviz/tq?tqx=out:csv"
+
+fetch(sheetURL)
+
+.then(res=>res.text())
+
+.then(data=>{
+
+let linhas=data.split("\n").slice(1)
+
+let galeria=document.getElementById("galeria")
+
+linhas.forEach(linha=>{
+
+let col=linha.split(",")
+
+let numero=col[0]
+let foto=col[1]
+
+let div=document.createElement("div")
+div.className="foto"
+
+div.innerHTML=`
+
+<img src="${foto}">
+<p>Foto ${numero}</p>
+<button onclick="adicionar('${numero}')">Adicionar</button>
+
+`
+
+galeria.appendChild(div)
+
+})
+
+})
+
+</script>
 
 </body>
 </html>
