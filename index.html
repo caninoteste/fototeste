@@ -1,153 +1,31 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-<meta charset="UTF-8">
-<title>Galeria de Fotos</title>
-
-<style>
-
-body{
-font-family: Arial;
-background:#f4f4f4;
-text-align:center;
-}
-
-.albuns{
-display:flex;
-justify-content:center;
-margin-top:40px;
-}
-
-.album{
-background:white;
-padding:30px;
-border-radius:10px;
-box-shadow:0 2px 8px rgba(0,0,0,0.2);
-cursor:pointer;
-}
-
-.galeria{
-display:grid;
-grid-template-columns:repeat(auto-fill,200px);
-gap:20px;
-justify-content:center;
-margin-top:30px;
-}
-
-.foto{
-background:white;
-padding:10px;
-border-radius:8px;
-box-shadow:0 2px 5px rgba(0,0,0,0.2);
-}
-
-.foto img{
-width:100%;
-}
-
-button{
-margin-top:5px;
-}
-
-</style>
-
-</head>
-
-<body>
-
-<h1>Galeria de Fotos</h1>
-
-<div id="home">
-
-<h2>Álbuns</h2>
-
-<div class="albuns">
-
-<div class="album" onclick="abrirAlbum()">
-TESTE SITE
-</div>
-
-</div>
-
-</div>
-
-
-<div id="album" style="display:none">
-
-<h2>Álbum TESTE SITE</h2>
-
-<button onclick="voltar()">Voltar</button>
-
-<div class="galeria" id="galeria"></div>
-
-</div>
-
-
 <script>
-
-function abrirAlbum(){
-
-document.getElementById("home").style.display="none"
-document.getElementById("album").style.display="block"
-
-carregarFotos()
-
-}
-
-function voltar(){
-
-document.getElementById("album").style.display="none"
-document.getElementById("home").style.display="block"
-
-}
-
-
 function carregarFotos(){
 
-let url="https://docs.google.com/spreadsheets/d/1m0-dDIjgq9p-bYnb4r_99PcXEvYzUsfaMfpQeiwNf50/gviz/tq?tqx=out:csv"
+    let url="https://docs.google.com/spreadsheets/d/e/2PACX-1vQl28B_dLz0aAl2rIvZvue6LLMoWgwhWdwlkS9knj1peYlLq3U_C3f0zi36bzyWFUo-_E7njQSWLXxI/pub?gid=670100109&single=true&output=csv"
 
-fetch(url)
+    fetch(url)
+    .then(res => res.text())
+    .then(data => {
+        let linhas = data.split("\n").slice(1) // pular cabeçalho
+        let galeria = document.getElementById("galeria")
+        galeria.innerHTML = ""
 
-.then(res=>res.text())
+        linhas.forEach(linha => {
+            let col = linha.split(",")
+            let numero = col[0].trim()
+            let foto = col[1].trim()
 
-.then(data=>{
+            if(!foto) return
 
-let linhas=data.split("\n").slice(1)
-
-let galeria=document.getElementById("galeria")
-
-galeria.innerHTML=""
-
-linhas.forEach(linha=>{
-
-let col=linha.split(",")
-
-let numero=col[0]
-let foto=col[1]
-
-if(!foto) return
-
-let div=document.createElement("div")
-div.className="foto"
-
-div.innerHTML=`
-
-<img src="${foto}">
-<p>Foto ${numero}</p>
-<button>Adicionar ao carrinho</button>
-
-`
-
-galeria.appendChild(div)
-
-})
-
-})
-
+            let div = document.createElement("div")
+            div.className = "foto"
+            div.innerHTML = `
+                <img src="${foto}">
+                <p>Foto ${numero}</p>
+                <button>Adicionar ao carrinho</button>
+            `
+            galeria.appendChild(div)
+        })
+    })
 }
-
 </script>
-
-</body>
-</html>
